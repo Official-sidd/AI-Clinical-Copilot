@@ -8,6 +8,10 @@ import {
   Box,
   Collapse,
   Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import {
   Psychology,
@@ -19,8 +23,10 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export const AISummary = () => {
+export const AISummary = ({ onApproveChange }) => {
   const [showCodes, setShowCodes] = useState(false);
+  const [isApproved, setIsApproved] = useState(false);
+  const [openConfirm, setOpenConfirm] = useState(false);
   const [summary] =
     useState(`Chief Complaint: Patient presents with persistent cough and mild fever for 3 days.
 
@@ -33,7 +39,7 @@ Plan: Recommend rest, hydration, and OTC symptom management. Follow up if sympto
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(summary);
-      alert("✅ Summary copied to clipboard!");
+      toast.success("Summary copied to clipboard!");
     } catch (err) {
       console.error("Failed to copy:", err);
     }
@@ -46,9 +52,56 @@ Plan: Recommend rest, hydration, and OTC symptom management. Follow up if sympto
     toast.info("Simulated: Regenerating AI summary...");
   };
 
+  const handleApproveClick = () => {
+    if (isApproved) {
+      // If already approved, clicking again will unapprove
+      setIsApproved(false);
+      onApproveChange(false);
+    } else {
+      // Ask for confirmation before approving
+      setOpenConfirm(true);
+    }
+  };
+
+  const handleConfirmApprove = () => {
+    setIsApproved(true);
+    onApproveChange(true);
+    setOpenConfirm(false);
+  };
+
+  const handleCancelApprove = () => {
+    setOpenConfirm(false);
+  };
+
   return (
     <Card sx={{ bgcolor: "background.paper", boxShadow: 2 }}>
       {/* <ToastContainer position="top-right" autoClose={2000} /> */}
+      {/* Confirmation Dialog */}
+      <Dialog
+        open={openConfirm}
+        onClose={handleCancelApprove}
+        aria-labelledby="approve-dialog-title"
+      >
+        <DialogTitle id="approve-dialog-title">Confirm Approval</DialogTitle>
+        <DialogContent>
+          <Typography>
+            Are you sure you want to approve this AI-generated summary?
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancelApprove} color="inherit">
+            Cancel
+          </Button>
+          <Button
+            onClick={handleConfirmApprove}
+            color="success"
+            variant="contained"
+          >
+            Approve
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <CardHeader
         title={
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -84,9 +137,19 @@ Plan: Recommend rest, hydration, and OTC symptom management. Follow up if sympto
           >
             Copy
           </Button>
-          <Button variant="contained" size="small" startIcon={<CheckCircle />}>
+          {/* <Button variant="contained" size="small" startIcon={<CheckCircle />}>
             Approve
+          </Button> */}
+          <Button
+            variant={isApproved ? "contained" : "outlined"}
+            color={isApproved ? "success" : "primary"}
+            size="small"
+            startIcon={<CheckCircle />}
+            onClick={handleApproveClick}
+          >
+            {isApproved ? "Approved" : "Approve"}
           </Button>
+
           <Button
             variant="outlined"
             size="small"

@@ -22,6 +22,7 @@ const Index = () => {
   const [loading, setLoading] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
   const [themeLocked, setThemeLocked] = useState(false);
+  const [summaryApproved, setSummaryApproved] = useState(false);
 
   const theme = useMemo(
     () =>
@@ -49,16 +50,16 @@ const Index = () => {
       setDarkMode(true);
       setThemeLocked(true);
       toast.dismiss();
-      toast("Once you go black, you can’t go back", {
-        position: "top-center",
-        autoClose: 3000,
-        closeOnClick: true,
-        pauseOnHover: false,
-        hideProgressBar: false,
-        draggable: true,
-        transition: Slide,
-        theme: "dark",
-      });
+      // toast("Once you go black, you can’t go back", {
+      //   position: "top-center",
+      //   autoClose: 3000,
+      //   closeOnClick: true,
+      //   pauseOnHover: false,
+      //   hideProgressBar: false,
+      //   draggable: true,
+      //   transition: Slide,
+      //   theme: "dark",
+      // });
     }
   };
 
@@ -93,7 +94,7 @@ const Index = () => {
               <VitalsInput />
               <FileUploader />
               <DoctorNotes />
-              <AISummary />
+              <AISummary onApproveChange={setSummaryApproved} />
             </Box>
 
             {/* Right Panel */}
@@ -103,7 +104,7 @@ const Index = () => {
           </Box>
         </Container>
 
-        <Footer />
+        <Footer isSummaryApproved={summaryApproved} />
       </Box>
     </ThemeProvider>
   );

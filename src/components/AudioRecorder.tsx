@@ -396,7 +396,7 @@ export const AudioRecorder = () => {
                   startIcon={<Send />}
                   fullWidth
                 >
-                  Send to AI
+                  Send Data To AI
                 </Button>
               </>
             )}

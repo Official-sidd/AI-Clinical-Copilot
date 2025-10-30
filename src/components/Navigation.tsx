@@ -1,6 +1,9 @@
 import { AppBar, Toolbar, Typography, Switch, Box } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export const Navigation = ({ darkMode, onToggleTheme, themeLocked }) => {
+  const navigate = useNavigate();
   return (
     <AppBar
       position="sticky"
@@ -10,7 +13,17 @@ export const Navigation = ({ darkMode, onToggleTheme, themeLocked }) => {
       }}
     >
       <Toolbar>
-        <Typography variant="h6" sx={{ flexGrow: 1 }}>
+        <Typography
+          onClick={() => {
+            // toast.error("Yaha kuch nahi hoga, chala ja bsdk!");
+            window.location.href = "/";
+          }}
+          variant="h6"
+          sx={{
+            flexGrow: 1,
+            cursor: "pointer",
+          }}
+        >
           AI Clinical Copilot
         </Typography>
 
