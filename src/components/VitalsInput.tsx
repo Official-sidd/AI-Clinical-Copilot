@@ -1,67 +1,99 @@
-import { Activity, Heart, Thermometer, Droplets } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { useState } from 'react';
+import { Card, CardContent, CardHeader, TextField, IconButton, Box } from '@mui/material';
+import { Favorite, Thermostat, WaterDrop, MonitorHeart, Edit, Save, Close } from '@mui/icons-material';
 
 export const VitalsInput = () => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [vitals, setVitals] = useState({
+    temperature: '',
+    bloodPressure: '',
+    heartRate: '',
+    oxygenLevel: ''
+  });
+
+  const handleChange = (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    setVitals({ ...vitals, [field]: e.target.value });
+  };
+
   return (
-    <Card className="glass-card transition-smooth hover:shadow-xl">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-lg">
-          <Activity className="h-5 w-5 text-primary" />
-          Patient Vitals & Related Documents
-        </CardTitle>
-      </CardHeader>
+    <Card sx={{ bgcolor: 'background.paper', boxShadow: 2 }}>
+      <CardHeader 
+        title={
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <MonitorHeart color="primary" />
+              <span>Patient Vitals</span>
+            </Box>
+            {!isEditing ? (
+              <IconButton color="primary" onClick={() => setIsEditing(true)} size="small">
+                <Edit />
+              </IconButton>
+            ) : (
+              <Box sx={{ display: 'flex', gap: 1 }}>
+                <IconButton color="primary" onClick={() => setIsEditing(false)} size="small">
+                  <Save />
+                </IconButton>
+                <IconButton color="error" onClick={() => setIsEditing(false)} size="small">
+                  <Close />
+                </IconButton>
+              </Box>
+            )}
+          </Box>
+        }
+      />
       <CardContent>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label className="flex items-center gap-2 text-sm">
-              <Thermometer className="h-4 w-4 text-primary" />
-              Temperature (°F)
-            </Label>
-            <Input 
-              type="number" 
-              placeholder="98.6" 
-              className="glass-panel"
-            />
-          </div>
+        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 3 }}>
+          <TextField
+            fullWidth
+            label="Temperature (°F)"
+            type="number"
+            value={vitals.temperature}
+            onChange={handleChange('temperature')}
+            disabled={!isEditing}
+            placeholder="98.6"
+            InputProps={{
+              startAdornment: <Thermostat color="primary" sx={{ mr: 1 }} />
+            }}
+          />
           
-          <div className="space-y-2">
-            <Label className="flex items-center gap-2 text-sm">
-              <Activity className="h-4 w-4 text-primary" />
-              Blood Pressure
-            </Label>
-            <Input 
-              type="text" 
-              placeholder="120/80" 
-              className="glass-panel"
-            />
-          </div>
+          <TextField
+            fullWidth
+            label="Blood Pressure"
+            value={vitals.bloodPressure}
+            onChange={handleChange('bloodPressure')}
+            disabled={!isEditing}
+            placeholder="120/80"
+            InputProps={{
+              startAdornment: <MonitorHeart color="primary" sx={{ mr: 1 }} />
+            }}
+          />
           
-          <div className="space-y-2">
-            <Label className="flex items-center gap-2 text-sm">
-              <Heart className="h-4 w-4 text-primary" />
-              Heart Rate (bpm)
-            </Label>
-            <Input 
-              type="number" 
-              placeholder="72" 
-              className="glass-panel"
-            />
-          </div>
+          <TextField
+            fullWidth
+            label="Heart Rate (bpm)"
+            type="number"
+            value={vitals.heartRate}
+            onChange={handleChange('heartRate')}
+            disabled={!isEditing}
+            placeholder="72"
+            InputProps={{
+              startAdornment: <Favorite color="primary" sx={{ mr: 1 }} />
+            }}
+          />
           
-          <div className="space-y-2">
-            <Label className="flex items-center gap-2 text-sm">
-              <Droplets className="h-4 w-4 text-primary" />
-              Oxygen Level (%)
-            </Label>
-            <Input 
-              type="number" 
-              placeholder="98" 
-              className="glass-panel"
-            />
-          </div>
-        </div>
+          <TextField
+            fullWidth
+            label="Oxygen Level (%)"
+            type="number"
+            value={vitals.oxygenLevel}
+            onChange={handleChange('oxygenLevel')}
+            disabled={!isEditing}
+            placeholder="98"
+            InputProps={{
+              startAdornment: <WaterDrop color="primary" sx={{ mr: 1 }} />
+            }}
+          />
+        </Box>
       </CardContent>
     </Card>
   );

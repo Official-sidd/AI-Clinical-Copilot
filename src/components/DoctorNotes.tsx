@@ -1,21 +1,66 @@
-import { FileEdit } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Textarea } from "@/components/ui/textarea";
+import { useState } from 'react';
+import { Card, CardContent, CardHeader, Tabs, Tab, TextField, Box, Typography } from '@mui/material';
+import { Description } from '@mui/icons-material';
+
+const noteTemplates = {
+  soap: `Subjective:\n\nObjective:\n\nAssessment:\n\nPlan:`,
+  dap: `Data:\n\nAssessment:\n\nPlan:`,
+  birp: `Behavior:\n\nIntervention:\n\nResponse:\n\nPlan:`
+};
 
 export const DoctorNotes = () => {
+  const [activeTab, setActiveTab] = useState(0);
+  const [notes, setNotes] = useState({
+    soap: noteTemplates.soap,
+    dap: noteTemplates.dap,
+    birp: noteTemplates.birp
+  });
+
+  const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
+    setActiveTab(newValue);
+  };
+
+  const handleNoteChange = (format: 'soap' | 'dap' | 'birp') => (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNotes({ ...notes, [format]: e.target.value });
+  };
+
+  const getCurrentFormat = () => {
+    const formats: Array<'soap' | 'dap' | 'birp'> = ['soap', 'dap', 'birp'];
+    return formats[activeTab];
+  };
+
   return (
-    <Card className="glass-card transition-smooth hover:shadow-xl">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-lg">
-          <FileEdit className="h-5 w-5 text-primary" />
-          Additional Notes for AI
-        </CardTitle>
-      </CardHeader>
+    <Card sx={{ bgcolor: 'background.paper', boxShadow: 2 }}>
+      <CardHeader 
+        title={
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Description color="primary" />
+            <span>Additional Notes for AI</span>
+          </Box>
+        }
+      />
       <CardContent>
-        <Textarea 
-          placeholder="Enter any additional observations, context, or specific instructions for the AI summary..."
-          className="min-h-[120px] glass-panel resize-none"
+        <Tabs value={activeTab} onChange={handleTabChange} sx={{ mb: 2 }}>
+          <Tab label="SOAP Format" />
+          <Tab label="DAP Format" />
+          <Tab label="BIRP Format" />
+        </Tabs>
+        
+        <TextField
+          fullWidth
+          multiline
+          rows={8}
+          value={notes[getCurrentFormat()]}
+          onChange={handleNoteChange(getCurrentFormat())}
+          placeholder="Enter your notes following the selected format..."
+          variant="outlined"
         />
+        
+        <Typography variant="caption" sx={{ mt: 1, display: 'block', color: 'text.secondary' }}>
+          {activeTab === 0 && 'SOAP: Subjective, Objective, Assessment, Plan'}
+          {activeTab === 1 && 'DAP: Data, Assessment, Plan'}
+          {activeTab === 2 && 'BIRP: Behavior, Intervention, Response, Plan'}
+        </Typography>
       </CardContent>
     </Card>
   );

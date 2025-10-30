@@ -1,42 +1,61 @@
-import { FileText, Image, FileSpreadsheet, Upload } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, Button, Box } from '@mui/material';
+import { Description, Image, TableChart, CloudUpload } from '@mui/icons-material';
 
 export const FileUploader = () => {
   return (
-    <Card className="glass-card transition-smooth hover:shadow-xl">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-lg">
-          <Upload className="h-5 w-5 text-primary" />
-          Document Uploads
-        </CardTitle>
-      </CardHeader>
+    <Card sx={{ bgcolor: 'background.paper', boxShadow: 2 }}>
+      <CardHeader 
+        title={
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <CloudUpload color="primary" />
+            <span>Document Uploads</span>
+          </Box>
+        }
+      />
       <CardContent>
-        <div className="grid grid-cols-3 gap-3">
+        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(3, 1fr)' }, gap: 2 }}>
           <Button 
-            variant="outline" 
-            className="h-auto flex-col gap-2 p-4 glass-panel hover:bg-accent/50"
+            variant="outlined" 
+            fullWidth
+            sx={{ 
+              height: 100, 
+              flexDirection: 'column', 
+              gap: 1,
+              '&:hover': { bgcolor: 'action.hover' }
+            }}
           >
-            <FileText className="h-6 w-6 text-primary" />
-            <span className="text-xs">Lab Report</span>
+            <Description color="primary" sx={{ fontSize: 32 }} />
+            <span style={{ fontSize: 12 }}>Lab Report</span>
           </Button>
           
           <Button 
-            variant="outline" 
-            className="h-auto flex-col gap-2 p-4 glass-panel hover:bg-accent/50"
+            variant="outlined" 
+            fullWidth
+            sx={{ 
+              height: 100, 
+              flexDirection: 'column', 
+              gap: 1,
+              '&:hover': { bgcolor: 'action.hover' }
+            }}
           >
-            <FileSpreadsheet className="h-6 w-6 text-primary" />
-            <span className="text-xs">Prescription</span>
+            <TableChart color="primary" sx={{ fontSize: 32 }} />
+            <span style={{ fontSize: 12 }}>Prescription</span>
           </Button>
           
           <Button 
-            variant="outline" 
-            className="h-auto flex-col gap-2 p-4 glass-panel hover:bg-accent/50"
+            variant="outlined" 
+            fullWidth
+            sx={{ 
+              height: 100, 
+              flexDirection: 'column', 
+              gap: 1,
+              '&:hover': { bgcolor: 'action.hover' }
+            }}
           >
-            <Image className="h-6 w-6 text-primary" />
-            <span className="text-xs">Medical Scan</span>
+            <Image color="primary" sx={{ fontSize: 32 }} />
+            <span style={{ fontSize: 12 }}>Medical Scan</span>
           </Button>
-        </div>
+        </Box>
       </CardContent>
     </Card>
   );

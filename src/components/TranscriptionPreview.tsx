@@ -1,7 +1,5 @@
-import { FileText, X } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { Card, CardContent, CardHeader, IconButton, Box, Typography } from '@mui/material';
+import { Article, Close } from '@mui/icons-material';
 
 export const TranscriptionPreview = () => {
   const sampleTranscript = `Doctor: Good morning! How are you feeling today?
@@ -25,35 +23,57 @@ Doctor: Have you traveled recently or been around anyone who's been sick?
 Patient: No recent travel, and I don't think so, but my coworker was out sick last week.`;
 
   return (
-    <Card className="glass-card h-full flex flex-col transition-smooth hover:shadow-xl">
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2 text-lg">
-            <FileText className="h-5 w-5 text-primary" />
-            Live Transcription
-          </CardTitle>
-          <Button variant="ghost" size="icon" className="h-8 w-8">
-            <X className="h-4 w-4" />
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent className="flex-1 flex flex-col min-h-0 px-4 pb-4">
-        <ScrollArea className="flex-1 glass-panel rounded-lg p-4">
-          <div className="space-y-3 text-sm leading-relaxed">
+    <Card sx={{ bgcolor: 'background.paper', boxShadow: 2, height: 'calc(100vh - 12rem)' }}>
+      <CardHeader 
+        title={
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Article color="primary" />
+              <span>Live Transcription</span>
+            </Box>
+            <IconButton size="small">
+              <Close fontSize="small" />
+            </IconButton>
+          </Box>
+        }
+      />
+      <CardContent>
+        <Box 
+          sx={{ 
+            height: 'calc(100vh - 18rem)', 
+            bgcolor: 'action.hover', 
+            p: 2, 
+            borderRadius: 2,
+            overflowY: 'auto'
+          }}
+        >
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             {sampleTranscript.split('\n\n').map((paragraph, idx) => (
-              <p 
-                key={idx}
-                className={paragraph.startsWith('Doctor:') ? 'text-primary font-medium' : 'text-foreground'}
+              <Typography 
+                key={idx} 
+                variant="body2" 
+                sx={{ 
+                  color: paragraph.startsWith('Doctor:') ? 'primary.main' : 'text.primary',
+                  fontWeight: paragraph.startsWith('Doctor:') ? 600 : 400
+                }}
               >
                 {paragraph}
-              </p>
+              </Typography>
             ))}
-            <div className="flex items-center gap-2 text-muted-foreground animate-pulse">
-              <div className="h-2 w-2 rounded-full bg-primary" />
-              Listening...
-            </div>
-          </div>
-        </ScrollArea>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'text.secondary' }}>
+              <Box 
+                sx={{ 
+                  width: 8, 
+                  height: 8, 
+                  bgcolor: 'primary.main', 
+                  borderRadius: '50%',
+                  animation: 'pulse 1.5s ease-in-out infinite'
+                }} 
+              />
+              <Typography variant="caption">Listening...</Typography>
+            </Box>
+          </Box>
+        </Box>
       </CardContent>
     </Card>
   );

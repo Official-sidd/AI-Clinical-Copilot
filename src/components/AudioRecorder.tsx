@@ -1,8 +1,6 @@
 import { useState } from "react";
-import { Mic, Square, Upload, Play, Send } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
+import { Card, CardContent, CardHeader, Button, Chip, Box, LinearProgress, Typography } from '@mui/material';
+import { Mic, StopCircle, Upload, PlayArrow, Send } from '@mui/icons-material';
 
 export const AudioRecorder = () => {
   const [isRecording, setIsRecording] = useState(false);
@@ -22,104 +20,110 @@ export const AudioRecorder = () => {
 
   const handleSendToAI = () => {
     setIsProcessing(true);
-    // Simulate processing
     setTimeout(() => setIsProcessing(false), 2000);
   };
 
   return (
-    <Card className="glass-card transition-smooth hover:shadow-xl">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-lg">
-          <Mic className="h-5 w-5 text-primary" />
-          Record or Upload Audio
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="flex gap-3">
+    <Card sx={{ bgcolor: 'background.paper', boxShadow: 2 }}>
+      <CardHeader 
+        title={
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Mic color="primary" />
+              <span>Record or Upload Audio</span>
+            </Box>
+            {isRecording && (
+              <Chip label="Recording..." color="error" size="small" />
+            )}
+          </Box>
+        }
+      />
+      <CardContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
           {!isRecording ? (
             <>
               <Button 
+                variant="contained" 
+                startIcon={<Mic />}
                 onClick={handleStartRecording}
-                variant="default"
-                className="flex-1 gap-2"
+                sx={{ flex: 1 }}
               >
-                <Mic className="h-4 w-4" />
                 Start Recording
               </Button>
-              <Button variant="outline" className="flex-1 gap-2">
-                <Upload className="h-4 w-4" />
+              <Button 
+                variant="outlined" 
+                startIcon={<Upload />}
+                sx={{ flex: 1 }}
+              >
                 Upload Audio
               </Button>
             </>
           ) : (
             <Button 
+              variant="contained" 
+              color="error"
+              startIcon={<StopCircle />}
               onClick={handleStopRecording}
-              variant="destructive"
-              className="flex-1 gap-2"
+              sx={{ flex: 1 }}
             >
-              <Square className="h-4 w-4" />
               Stop Recording
             </Button>
           )}
-        </div>
+        </Box>
 
         {isRecording && (
-          <div className="space-y-2">
-            <div className="flex items-center gap-3">
-              <div className="h-2 w-2 rounded-full bg-destructive animate-pulse" />
-              <span className="text-sm text-muted-foreground">
-                Recording: {Math.floor(recordingTime / 60)}:{(recordingTime % 60).toString().padStart(2, '0')}
-              </span>
-            </div>
-            <div className="h-16 glass-panel rounded-lg flex items-center justify-center">
-              <div className="flex gap-1 items-end h-8">
-                {[...Array(20)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="w-1 bg-primary rounded-full animate-pulse"
-                    style={{
-                      height: `${Math.random() * 100}%`,
-                      animationDelay: `${i * 0.05}s`,
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
+          <Box sx={{ bgcolor: 'action.hover', p: 3, borderRadius: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: 0.5, height: 64 }}>
+              {[...Array(20)].map((_, i) => (
+                <Box
+                  key={i}
+                  sx={{
+                    width: 4,
+                    bgcolor: 'primary.main',
+                    borderRadius: 1,
+                    height: `${Math.random() * 100}%`,
+                    animation: 'pulse 1s ease-in-out infinite',
+                    animationDelay: `${i * 0.1}s`
+                  }}
+                />
+              ))}
+            </Box>
+            <Box sx={{ textAlign: 'center', mt: 1, color: 'text.secondary', fontSize: 14 }}>
+              Recording: {Math.floor(recordingTime / 60)}:{(recordingTime % 60).toString().padStart(2, '0')}
+            </Box>
+          </Box>
         )}
 
         {hasRecording && !isRecording && (
-          <div className="space-y-3">
-            <div className="glass-panel rounded-lg p-4 space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium">recording.wav</span>
-                <Button variant="ghost" size="sm" className="h-8 gap-2">
-                  <Play className="h-3 w-3" />
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <Box sx={{ bgcolor: 'action.hover', p: 2, borderRadius: 2 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+                <Typography variant="body2" sx={{ fontWeight: 500 }}>recording.wav</Typography>
+                <Button variant="text" size="small" startIcon={<PlayArrow />}>
                   Play
                 </Button>
-              </div>
-              <Progress value={33} className="h-1" />
-            </div>
+              </Box>
+              <LinearProgress variant="determinate" value={33} />
+            </Box>
             
             {isProcessing ? (
-              <div className="space-y-2">
-                <div className="flex items-center justify-center gap-2 text-sm text-primary">
-                  <div className="h-4 w-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+              <Box sx={{ textAlign: 'center' }}>
+                <Typography variant="body2" color="primary" sx={{ mb: 1 }}>
                   Processing audio...
-                </div>
-                <Progress value={60} className="h-1" />
-              </div>
+                </Typography>
+                <LinearProgress />
+              </Box>
             ) : (
               <Button 
                 onClick={handleSendToAI}
-                variant="default" 
-                className="w-full gap-2"
+                variant="contained" 
+                startIcon={<Send />}
+                fullWidth
               >
-                <Send className="h-4 w-4" />
                 Send to AI
               </Button>
             )}
-          </div>
+          </Box>
         )}
       </CardContent>
     </Card>

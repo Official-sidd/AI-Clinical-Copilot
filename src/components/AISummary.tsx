@@ -1,8 +1,6 @@
-import { Brain, Copy, RefreshCw, CheckCircle, Code } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
+import { Card, CardContent, CardHeader, Button, TextField, Box, Collapse, Typography } from '@mui/material';
+import { Psychology, ContentCopy, Refresh, CheckCircle, Code } from '@mui/icons-material';
 
 export const AISummary = () => {
   const [showCodes, setShowCodes] = useState(false);
@@ -15,63 +13,66 @@ Assessment: Likely viral upper respiratory infection. Vitals stable. No signs of
 Plan: Recommend rest, hydration, and OTC symptom management. Follow up if symptoms worsen or persist beyond 7 days.`);
 
   return (
-    <Card className="glass-card transition-smooth hover:shadow-xl">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-lg">
-          <Brain className="h-5 w-5 text-primary" />
-          AI-Generated Visit Summary
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <Textarea 
+    <Card sx={{ bgcolor: 'background.paper', boxShadow: 2 }}>
+      <CardHeader 
+        title={
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Psychology color="primary" />
+            <span>AI-Generated Visit Summary</span>
+          </Box>
+        }
+      />
+      <CardContent>
+        <TextField
+          fullWidth
+          multiline
+          rows={8}
           value={summary}
-          className="min-h-[200px] glass-panel font-mono text-sm resize-none"
-          readOnly
+          InputProps={{ readOnly: true }}
+          sx={{ mb: 2, fontFamily: 'monospace', fontSize: 13 }}
         />
         
-        <div className="flex flex-wrap gap-2">
-          <Button variant="outline" size="sm" className="gap-2">
-            <RefreshCw className="h-4 w-4" />
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
+          <Button variant="outlined" size="small" startIcon={<Refresh />}>
             Regenerate
           </Button>
-          <Button variant="outline" size="sm" className="gap-2">
-            <Copy className="h-4 w-4" />
+          <Button variant="outlined" size="small" startIcon={<ContentCopy />}>
             Copy
           </Button>
-          <Button variant="default" size="sm" className="gap-2">
-            <CheckCircle className="h-4 w-4" />
+          <Button variant="contained" size="small" startIcon={<CheckCircle />}>
             Approve
           </Button>
           <Button 
-            variant="outline" 
-            size="sm" 
-            className="gap-2"
+            variant="outlined" 
+            size="small" 
+            startIcon={<Code />}
             onClick={() => setShowCodes(!showCodes)}
           >
-            <Code className="h-4 w-4" />
             {showCodes ? "Hide" : "Show"} Codes
           </Button>
-        </div>
+        </Box>
 
-        {showCodes && (
-          <div className="glass-panel p-4 rounded-lg space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
-            <h4 className="font-semibold text-sm">Suggested Medical Codes</h4>
-            <div className="space-y-1 text-sm text-muted-foreground">
-              <div className="flex justify-between">
+        <Collapse in={showCodes}>
+          <Box sx={{ bgcolor: 'action.hover', p: 2, borderRadius: 2 }}>
+            <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600 }}>
+              Suggested Medical Codes
+            </Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', fontSize: 14 }}>
                 <span>ICD-10: R05 (Cough)</span>
-                <span className="text-primary">Primary</span>
-              </div>
-              <div className="flex justify-between">
+                <Typography variant="caption" color="primary" sx={{ fontWeight: 600 }}>Primary</Typography>
+              </Box>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', fontSize: 14 }}>
                 <span>ICD-10: R50.9 (Fever, unspecified)</span>
-                <span className="text-muted-foreground">Secondary</span>
-              </div>
-              <div className="flex justify-between">
+                <Typography variant="caption" color="text.secondary">Secondary</Typography>
+              </Box>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', fontSize: 14 }}>
                 <span>CPT: 99213 (Office visit, moderate complexity)</span>
-                <span className="text-primary">Billing</span>
-              </div>
-            </div>
-          </div>
-        )}
+                <Typography variant="caption" color="primary" sx={{ fontWeight: 600 }}>Billing</Typography>
+              </Box>
+            </Box>
+          </Box>
+        </Collapse>
       </CardContent>
     </Card>
   );
