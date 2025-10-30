@@ -35,7 +35,60 @@ export const AudioRecorder = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  // 🎙️ Start Recording
+  const [peerConnection, setPeerConnection] =
+    useState<RTCPeerConnection | null>(null);
+  const [localStream, setLocalStream] = useState<MediaStream | null>(null);
+
+  // const handleStartRecording = async () => {
+  //   try {
+  //     // Stop any playing audio (prevent overlap)
+  //     if (audioRef.current && !audioRef.current.paused) {
+  //       audioRef.current.pause();
+  //     }
+
+  //     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  //     setLocalStream(stream);
+
+  //     const pc = new RTCPeerConnection();
+
+  //     // Add local audio track to peer connection
+  //     stream.getTracks().forEach((track) => pc.addTrack(track, stream));
+
+  //     // Create an SDP offer
+  //     const offer = await pc.createOffer();
+  //     await pc.setLocalDescription(offer);
+
+  //     // Send offer to backend
+  //     const res = await fetch("/api/webrtc-offer", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ sdp: offer.sdp }),
+  //     });
+
+  //     const { answer } = await res.json();
+
+  //     // Apply the backend’s answer SDP
+  //     await pc.setRemoteDescription({ type: "answer", sdp: answer });
+
+  //     setPeerConnection(pc);
+  //     setIsRecording(true);
+  //   } catch (error) {
+  //     console.error("Error starting WebRTC recording:", error);
+  //   }
+  // };
+
+  // const handleStopRecording = () => {
+  //   if (localStream) {
+  //     localStream.getTracks().forEach((track) => track.stop());
+  //   }
+  //   if (peerConnection) {
+  //     peerConnection.close();
+  //     setPeerConnection(null);
+  //   }
+  //   setIsRecording(false);
+  // };
+
+  //🎙️ Start Recording
   const handleStartRecording = async () => {
     if (isPlaying && audioRef.current) {
       audioRef.current.pause();
@@ -58,8 +111,9 @@ export const AudioRecorder = () => {
 
       mediaRecorder.onstop = () => {
         const audioBlob = new Blob(audioChunksRef.current, {
-          type: "audio/webm",
+          type: "audio/mp3",
         });
+        console.log("🎧 Recorded audio type:", audioBlob.type);
         setRecordedBlob(audioBlob);
         setHasRecording(true);
         const audioUrl = URL.createObjectURL(audioBlob);
@@ -137,7 +191,7 @@ export const AudioRecorder = () => {
 
     try {
       const formData = new FormData();
-      formData.append("audio", recordedBlob, "recording.webm");
+      formData.append("audio", recordedBlob, "recording.mp3");
 
       const res = await fetch("https://your-backend-url.com/api/upload", {
         method: "POST",
@@ -151,6 +205,16 @@ export const AudioRecorder = () => {
     } finally {
       setIsProcessing(false);
     }
+  };
+
+  const handleDownload = () => {
+    if (!recordedBlob) return;
+    const url = URL.createObjectURL(recordedBlob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "recording.mp3"; // or .webm depending on your type
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   // 🧹 Cleanup audio on unmount
@@ -322,14 +386,19 @@ export const AudioRecorder = () => {
                 <LinearProgress />
               </Box>
             ) : (
-              <Button
-                onClick={handleSendToAI}
-                variant="contained"
-                startIcon={<Send />}
-                fullWidth
-              >
-                Send to AI
-              </Button>
+              <>
+                <Button onClick={handleDownload} variant="outlined" fullWidth>
+                  Download Audio
+                </Button>
+                <Button
+                  onClick={handleSendToAI}
+                  variant="contained"
+                  startIcon={<Send />}
+                  fullWidth
+                >
+                  Send to AI
+                </Button>
+              </>
             )}
           </Box>
         )}
