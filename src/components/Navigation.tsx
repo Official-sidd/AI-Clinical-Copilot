@@ -1,36 +1,32 @@
-import { AppBar, Toolbar, Typography, Button, Avatar, IconButton, Box } from '@mui/material';
-import { LocalHospital, Settings, Add } from '@mui/icons-material';
+import { AppBar, Toolbar, Typography, Switch, Box } from "@mui/material";
 
-const Navigation = () => {
+export const Navigation = ({ darkMode, onToggleTheme, themeLocked }) => {
   return (
-    <AppBar position="sticky" sx={{ bgcolor: 'background.paper', boxShadow: 1 }}>
-      <Toolbar sx={{ justifyContent: 'space-between', px: 3 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <Box sx={{ bgcolor: 'primary.light', p: 1, borderRadius: 2 }}>
-            <LocalHospital sx={{ color: 'primary.main', fontSize: 28 }} />
-          </Box>
-          <Box>
-            <Typography variant="h6" sx={{ fontWeight: 700, color: 'text.primary' }}>
-              AI Clinical Copilot
+    <AppBar
+      position="sticky"
+      sx={{
+        bgcolor: darkMode ? "#161b22" : "#1976d2",
+        color: darkMode ? "#e0e0e0" : "#fff",
+      }}
+    >
+      <Toolbar>
+        <Typography variant="h6" sx={{ flexGrow: 1 }}>
+          AI Clinical Copilot
+        </Typography>
+
+        {!themeLocked && (
+          <Box display="flex" alignItems="center" gap={1}>
+            <Typography variant="body2">
+              {darkMode ? "Dark" : "Light"} Mode
             </Typography>
-            <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-              Streamline your documentation
-            </Typography>
+            <Switch
+              checked={darkMode}
+              onChange={onToggleTheme}
+              color="default"
+            />
           </Box>
-        </Box>
-        
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <Button variant="contained" startIcon={<Add />}>
-            New Consultation
-          </Button>
-          <IconButton>
-            <Settings />
-          </IconButton>
-          <Avatar src="https://api.dicebear.com/7.x/avataaars/svg?seed=doctor" />
-        </Box>
+        )}
       </Toolbar>
     </AppBar>
   );
 };
-
-export { Navigation };
