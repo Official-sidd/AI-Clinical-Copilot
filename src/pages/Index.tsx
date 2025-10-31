@@ -36,9 +36,9 @@ const Index = () => {
   const [summary, setSummary] = useState(null);
   const [mediCodes, setMediCodes] = useState();
   const [notes, setNotes] = useState({
-    BIRP: { B: "", I: "", R: "", P: "" },
-    DAP: { D: "", A: "", P: "" },
     SOAP: { S: "", O: "", A: "", P: "" },
+    DAP: { D: "", A: "", P: "" },
+    BIRP: { B: "", I: "", R: "", P: "" },
   });
   const [showFallback, setShowFallback] = useState(false);
 
@@ -154,6 +154,8 @@ const Index = () => {
               <DoctorNotesSection
                 notes={notes}
                 onSave={(updated) => console.log("Updated Notes:", updated)}
+                setSummary={setSummary}
+                setMediCodes={setMediCodes}
               />
               <AISummary
                 onApproveChange={setSummaryApproved}

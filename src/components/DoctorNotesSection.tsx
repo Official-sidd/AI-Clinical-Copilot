@@ -21,14 +21,17 @@ import { Edit } from "@mui/icons-material";
 interface DoctorNotesSectionProps {
   notes: Record<string, Record<string, string>>;
   onSave?: (updatedNotes: Record<string, Record<string, string>>) => void;
+  setSummary:(summary: any)=>void;  
+  setMediCodes:(summary: any)=>void;  
 }
 
 async function updateDoctorNotes(
   notes: Record<string, Record<string, string>>
 ) {
   try {
+    const BASE_URL = import.meta.env.VITE_BASE_URL;
     const response = await fetch(
-      "https://bk6xbdf1-5000.inc1.devtunnels.ms/re_generate_summary",
+      `${BASE_URL}/re_generate_summary`,
       {
         method: "POST",
         headers: {
@@ -54,6 +57,8 @@ async function updateDoctorNotes(
 export const DoctorNotesSection: React.FC<DoctorNotesSectionProps> = ({
   notes,
   onSave,
+  setSummary,
+  setMediCodes,
 }) => {
   const noteTypes = Object.keys(notes || {}); // ["BIRP", "DAP", "SOAP"]
   const [activeTab, setActiveTab] = useState(0);
@@ -85,11 +90,26 @@ export const DoctorNotesSection: React.FC<DoctorNotesSectionProps> = ({
 
   const handleSave = async () => {
     setLoading(true);
+    let payload={} as Record<string, Record<string, string>>;
+    if (notes.BIRP !== editableNotes.BIRP) 
+      payload.BIRP = editableNotes.BIRP;
+    
+    
+    if (notes.DAP !== editableNotes.DAP) 
+      payload.DAP = editableNotes.DAP;
+    
+    if (notes.SOAP !== editableNotes.SOAP) 
+      payload.SOAP = editableNotes.SOAP;
+  
     try {
-      const result = await updateDoctorNotes(editableNotes);
-      if (onSave) onSave(editableNotes);
+      // const result = await updateDoctorNotes(editableNotes);
+      const result = await updateDoctorNotes(payload);
+      // if (onSave) onSave(editableNotes);
+      if (onSave) onSave(payload);
       console.log("Server response:", result);
       setEdited(false);
+      setSummary(result.summary);
+      setMediCodes(result.medical_codes);
     } catch (error) {
       console.error("Failed to save doctor notes:", error);
     } finally {
