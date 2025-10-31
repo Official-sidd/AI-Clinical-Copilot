@@ -22,6 +22,8 @@ import { fetchTranscript } from "../utils/api";
 import { Loader } from "@/components/ui/Loader";
 import { set } from "date-fns";
 import { DoctorNotesSection } from "@/components/DoctorNotesSection";
+import { ProbablePrescription } from "@/components/ProbablePrescription";
+import { EditablePrescriptionSection } from "@/components/EditablePrescriptionSection";
 
 const Index = () => {
   const [loading, setLoading] = useState(true);
@@ -158,6 +160,26 @@ const Index = () => {
                 summary={summary}
                 medical_codes={mediCodes}
               />
+              <EditablePrescriptionSection
+                prescriptions={[
+                  {
+                    name: "Paracetamol 500mg",
+                    dosage: "1 tablet",
+                    frequency: "Twice a day",
+                    duration: "5 days",
+                  },
+                  {
+                    name: "Ibuprofen 400mg",
+                    dosage: "1 tablet",
+                    frequency: "After meals",
+                    duration: "3 days",
+                  },
+                ]}
+                onSave={(updated) =>
+                  console.log("Saved prescriptions:", updated)
+                }
+              />
+              {/* <ProbablePrescription prescriptions={transcriptData?.prescriptions || []} /> */}
             </Box>
 
             {/* Right Panel */}

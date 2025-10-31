@@ -411,12 +411,12 @@ export const AudioRecorder = ({ onAudioReady, onSendToAI }) => {
                   Download Audio
                 </Button>
                 <Button
-                  onClick={ () => onSendToAI(recordedBlob)}
+                  onClick={() => onSendToAI(recordedBlob)}
                   variant="contained"
                   startIcon={<Send />}
                   fullWidth
                 >
-                  Send Data To AI
+                  Continue
                 </Button>
               </>
             )}
