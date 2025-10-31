@@ -1,0 +1,146 @@
+{
+  "chunk_details": [
+    {
+      "channel_tag": null,
+      "confidence": -0.31081485748291016,
+      "role": "Doctor",
+      "role_confidence": 0.9,
+      "role_rationale": "Greeting and asking about the patient's condition.",
+      "transcript": "Good morning, how are you feeling now?"
+    },
+    {
+      "channel_tag": null,
+      "confidence": -0.31081485748291016,
+      "role": "Patient",
+      "role_confidence": 0.9,
+      "role_rationale": "Patient responds about their condition.",
+      "transcript": "Good morning doctor, not too great."
+    },
+    {
+      "channel_tag": null,
+      "confidence": -0.31081485748291016,
+      "role": "Patient",
+      "role_confidence": 0.9,
+      "role_rationale": "Describing symptoms of a headache.",
+      "transcript": "Actually, I have been having a headache for the past few days."
+    },
+    {
+      "channel_tag": null,
+      "confidence": -0.31081485748291016,
+      "role": "Doctor",
+      "role_confidence": 0.9,
+      "role_rationale": "Requesting more information about the patient's symptoms.",
+      "transcript": "I see. Can you tell me more about it?"
+    },
+    {
+      "channel_tag": null,
+      "confidence": -0.31081485748291016,
+      "role": "Doctor",
+      "role_confidence": 0.9,
+      "role_rationale": "Asking for specifics about the pain location and onset.",
+      "transcript": "Where exactly do you feel the pain and when did it start?"
+    },
+    {
+      "channel_tag": null,
+      "confidence": -0.31081485748291016,
+      "role": "Patient",
+      "role_confidence": 0.9,
+      "role_rationale": "Patient provides information about the duration of the headache.",
+      "transcript": "It started around 3 days ago."
+    },
+    {
+      "channel_tag": null,
+      "confidence": -0.31081485748291016,
+      "role": "Patient",
+      "role_confidence": 0.9,
+      "role_rationale": "Describing the location of the headache pain.",
+      "transcript": "The pain is mostly around my temples and sometimes at the back of my head."
+    },
+    {
+      "channel_tag": null,
+      "confidence": -0.2274412363767624,
+      "role": "Doctor",
+      "role_confidence": 0.9,
+      "role_rationale": "Inquiring about the severity of the pain.",
+      "transcript": "And how severe would you say the pain is on a scale of 1 to 10 with 10 being the worst?"
+    },
+    {
+      "channel_tag": null,
+      "confidence": -0.2274412363767624,
+      "role": "Patient",
+      "role_confidence": 0.9,
+      "role_rationale": "Patient describes the severity and nature of the pain.",
+      "transcript": "Maybe 10. It's not unbearable but it's unbearable. It's definitely bothering me."
+    },
+    {
+      "channel_tag": null,
+      "confidence": -0.2274412363767624,
+      "role": "Doctor",
+      "role_confidence": 0.9,
+      "role_rationale": "Asking about factors affecting the headache.",
+      "transcript": "Do you notice anything that makes it better or worse?"
+    },
+    {
+      "channel_tag": null,
+      "confidence": -0.2274412363767624,
+      "role": "Patient",
+      "role_confidence": 0.9,
+      "role_rationale": "Patient explains triggers for worsening symptoms.",
+      "transcript": "Seems to get worse when I stare at my screen or at my manager."
+    },
+    {
+      "channel_tag": null,
+      "confidence": -0.2274412363767624,
+      "role": "Patient",
+      "role_confidence": 0.9,
+      "role_rationale": "Patient shares what alleviates the headache.",
+      "transcript": "Resting or closing my eyes helps a little."
+    }
+  ],
+  "chunks": [
+    "Good morning, how are you feeling today?",
+    "Good morning doctor, not too great.",
+    "Actually, I have been having a headache for the past few days.",
+    "I see. Can you tell me more about it?",
+    "Where exactly do you feel the pain and when did it start?",
+    "It started around 3 days ago.",
+    "The pain is mostly around my temples and sometimes at the back of my head.",
+    "And how severe would you say the pain is on a scale of 1 to 10 with 10 being the worst?",
+    "Maybe 10. It's not unbearable but it's unbearable. It's definitely bothering me.",
+    "Do you notice anything that makes it better or worse?",
+    "Seems to get worse when I stare at my screen or at my manager.",
+    "Resting or closing my eyes helps a little."
+  ],
+  "config": {
+    "language_code": "en-US",
+    "model": "whisper-1",
+    "note_model": "gpt-4o-mini",
+    "provider": "whisper",
+    "role_model": "gpt-4o-mini",
+    "segments": 12
+  },
+  "dialoge": "doctor: Good morning, how are you feeling today?\npatient: Good morning doctor, not too great.\npatient: Actually, I have been having a headache for the past few days.\ndoctor: I see. Can you tell me more about it?\ndoctor: Where exactly do you feel the pain and when did it start?\npatient: It started around 3 days ago.\npatient: The pain is mostly around my temples and sometimes at the back of my head.\ndoctor: And how severe would you say the pain is on a scale of 1 to 10 with 10 being the worst?\npatient: Maybe 10. It's not unbearable but it's unbearable. It's definitely bothering me.\ndoctor: Do you notice anything that makes it better or worse?\npatient: Seems to get worse when I stare at my screen or at my manager.\npatient: Resting or closing my eyes helps a little.",
+  "dialogue": "doctor: Good morning, how are you feeling today?\npatient: Good morning doctor, not too great.\npatient: Actually, I have been having a headache for the past few days.\ndoctor: I see. Can you tell me more about it?\ndoctor: Where exactly do you feel the pain and when did it start?\npatient: It started around 3 days ago.\npatient: The pain is mostly around my temples and sometimes at the back of my head.\ndoctor: And how severe would you say the pain is on a scale of 1 to 10 with 10 being the worst?\npatient: Maybe 10. It's not unbearable but it's unbearable. It's definitely bothering me.\ndoctor: Do you notice anything that makes it better or worse?\npatient: Seems to get worse when I stare at my screen or at my manager.\npatient: Resting or closing my eyes helps a little.",
+  "diarization": [],
+  "notes": {
+    "BIRP": {
+      "B": "** Patient reports a headache for the past 3 days, primarily around the temples and sometimes at the back of the head, rated 10/10 in severity. Symptoms worsen with screen time and interactions with the manager; resting or closing eyes provides some relief.\n\n**",
+      "I": "** Not discussed.\n\n**",
+      "P": "** Monitor headache symptoms and consider follow-up if they persist or worsen.",
+      "R": "** Patient expressed that the headache is bothersome but not unbearable.\n\n**"
+    },
+    "DAP": {
+      "A": "** Patient reports having a headache for the past three days, primarily around the temples and sometimes at the back of the head. The pain is rated as a 10 on a scale of 1 to 10, indicating it is bothersome but not unbearable. The headache worsens with screen time or when interacting with their manager, while resting or closing their eyes provides some relief.\n\n**Assessment:** The patient is experiencing a severe headache likely exacerbated by prolonged screen exposure and stress related to work interactions. \n\n**Plan:** Recommend reducing screen time and taking regular breaks. Consider further evaluation for potential underlying causes if symptoms persist. Advise the patient to rest and monitor headache frequency and severity. Follow up as needed.",
+      "D": "Not discussed",
+      "P": "Not discussed"
+    },
+    "SOAP": {
+      "A": "Assessment**  \nHeadache, likely tension-type, exacerbated by screen time and stress.\n\n**",
+      "O": "Objective**  \nNot discussed.\n\n**",
+      "P": "Plan**  \nNot discussed.",
+      "S": "Subjective**  \nPatient reports having a headache for the past three days, primarily around the temples and sometimes at the back of the head. The pain is rated as a 10 on a scale of 1 to 10, indicating it is bothersome but not unbearable. The headache worsens with screen time and interactions with their manager, while resting or closing their eyes provides some relief.\n\n**"
+    }
+  },
+  "transcript": "Good morning, how are you feeling today? Good morning doctor, not too great. Actually, I have been having a headache for the past few days. I see. Can you tell me more about it? Where exactly do you feel the pain and when did it start? It started around 3 days ago. The pain is mostly around my temples and sometimes at the back of my head. And how severe would you say the pain is on a scale of 1 to 10 with 10 being the worst? Maybe 10. It's not unbearable but it's unbearable. It's definitely bothering me. Do you notice anything that makes it better or worse? Seems to get worse when I stare at my screen or at my manager. Resting or closing my eyes helps a little.",
+  "words": []
+}
