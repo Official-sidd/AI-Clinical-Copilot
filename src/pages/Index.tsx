@@ -14,15 +14,51 @@ import { AISummary } from "@/components/AISummary";
 import { TranscriptionPreview } from "@/components/TranscriptionPreview";
 import { Footer } from "@/components/Footer";
 import SplashScreen from "../components/ui/SplashScreen";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Slide, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import sampleData from "../data/transcript.json";
+import { fetchTranscript } from "../utils/api";
+import { Loader } from "@/components/ui/Loader";
+import { set } from "date-fns";
+import { DoctorNotesSection } from "@/components/DoctorNotesSection";
 
 const Index = () => {
   const [loading, setLoading] = useState(true);
+  const [loadingTranscript, setLoadingTranscript] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const [themeLocked, setThemeLocked] = useState(false);
   const [summaryApproved, setSummaryApproved] = useState(false);
+  const [audioFile, setAudioFile] = useState(null);
+  const [transcriptData, setTranscriptData] = useState(null);
+  const [summary, setSummary] = useState(null);
+  const [mediCodes, setMediCodes] = useState();
+  const [notes, setNotes] = useState({
+    BIRP: { B: "", I: "", R: "", P: "" },
+    DAP: { D: "", A: "", P: "" },
+    SOAP: { S: "", O: "", A: "", P: "" },
+  });
+  const [showFallback, setShowFallback] = useState(false);
+
+  const notesData = {
+    BIRP: {
+      B: "Patient reports having a headache for the past three days, primarily around the temples and sometimes at the back of the head...",
+      I: "Not discussed.",
+      R: "Patient expressed that the headache is bothersome but not unbearable.",
+      P: "Follow-up to assess headache management and consider further evaluation if symptoms persist.",
+    },
+    DAP: {
+      D: "Not discussed",
+      A: "Patient reports having a headache for the past three days...",
+      P: "Not discussed",
+    },
+    SOAP: {
+      S: "Patient reports having a headache for the past three days...",
+      O: "Not discussed.",
+      A: "Headache, likely tension-type due to prolonged screen time and stress.",
+      P: "Recommend reducing screen time, taking regular breaks, and practicing relaxation techniques.",
+    },
+  };
 
   const theme = useMemo(
     () =>
@@ -50,16 +86,31 @@ const Index = () => {
       setDarkMode(true);
       setThemeLocked(true);
       toast.dismiss();
-      // toast("Once you go black, you can’t go back", {
-      //   position: "top-center",
-      //   autoClose: 3000,
-      //   closeOnClick: true,
-      //   pauseOnHover: false,
-      //   hideProgressBar: false,
-      //   draggable: true,
-      //   transition: Slide,
-      //   theme: "dark",
-      // });
+    }
+  };
+
+  const handleAudioReady = (file) => {
+    setAudioFile(file);
+  };
+
+  const handleSendToAI = async (file) => {
+    if (!file) {
+      console.error("No audio blob found");
+      return;
+    }
+    try {
+      setLoadingTranscript(true);
+      const result = await fetchTranscript(file);
+      console.log("Transcription result:", result);
+      setTranscriptData(result);
+      setSummary(result.summary);
+      console.log("notes data", result.notes);
+      setNotes(result.notes);
+      setMediCodes(result.medical_codes);
+      setLoadingTranscript(true);
+    } catch (err) {
+      console.error("Transcription failed:", err);
+      setShowFallback(true);
     }
   };
 
@@ -73,6 +124,7 @@ const Index = () => {
         pauseOnHover={false}
         draggable
       />
+
       <Box sx={{ minHeight: "100vh", bgcolor: "background.default" }}>
         <Navigation
           darkMode={darkMode}
@@ -90,17 +142,36 @@ const Index = () => {
           >
             {/* Left Panel */}
             <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-              <AudioRecorder />
+              <AudioRecorder
+                onAudioReady={handleAudioReady}
+                onSendToAI={handleSendToAI}
+              />{" "}
+              {/* ✅ pass setter */}
               <VitalsInput />
               <FileUploader />
-              <DoctorNotes />
-              <AISummary onApproveChange={setSummaryApproved} />
+              <DoctorNotesSection
+                notes={notes}
+                onSave={(updated) => console.log("Updated Notes:", updated)}
+              />
+              <AISummary
+                onApproveChange={setSummaryApproved}
+                summary={summary}
+                medical_codes={mediCodes}
+              />
             </Box>
 
             {/* Right Panel */}
-            <Box sx={{ position: "sticky", top: 96, height: "fit-content" }}>
-              <TranscriptionPreview />
-            </Box>
+            {transcriptData ? (
+              <Box sx={{ position: "sticky", top: 96, height: "fit-content" }}>
+                <TranscriptionPreview data={transcriptData} />
+              </Box>
+            ) : showFallback ? (
+              <Box sx={{ position: "sticky", top: 96, height: "fit-content" }}>
+                <TranscriptionPreview data={sampleData} />
+              </Box>
+            ) : loadingTranscript ? (
+              <Loader />
+            ) : null}
           </Box>
         </Container>
 

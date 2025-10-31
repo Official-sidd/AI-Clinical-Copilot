@@ -19,7 +19,7 @@ import {
   Send,
 } from "@mui/icons-material";
 
-export const AudioRecorder = () => {
+export const AudioRecorder = ({ onAudioReady, onSendToAI }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [recordedBlob, setRecordedBlob] = useState<Blob | null>(null);
   const [hasRecording, setHasRecording] = useState(false);
@@ -34,6 +34,8 @@ export const AudioRecorder = () => {
   const audioUrlRef = useRef<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const [audioBlob, setAudioBlob] = useState(null);
 
   const [peerConnection, setPeerConnection] =
     useState<RTCPeerConnection | null>(null);
@@ -88,6 +90,20 @@ export const AudioRecorder = () => {
   //   setIsRecording(false);
   // };
 
+  const handleRecordingComplete = (blob) => {
+    setAudioBlob(blob);
+    const audioFile = new File([blob], "recording.wav", { type: "audio/wav" });
+    onAudioReady(audioFile); // 🔥 Send it to parent
+  };
+
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setAudioBlob(file);
+      onAudioReady(file); // 🔥 Send uploaded file to parent
+    }
+  };
+
   //🎙️ Start Recording
   const handleStartRecording = async () => {
     if (isPlaying && audioRef.current) {
@@ -116,6 +132,7 @@ export const AudioRecorder = () => {
         console.log("🎧 Recorded audio type:", audioBlob.type);
         setRecordedBlob(audioBlob);
         setHasRecording(true);
+        onAudioReady(audioBlob);
         const audioUrl = URL.createObjectURL(audioBlob);
         audioUrlRef.current = audioUrl;
         audioRef.current = new Audio(audioUrl);
@@ -142,7 +159,9 @@ export const AudioRecorder = () => {
     const file = event.target.files?.[0];
     if (file) {
       setRecordedBlob(file);
+      onAudioReady(file);
       setHasRecording(true);
+
       const url = URL.createObjectURL(file);
       audioUrlRef.current = url;
       audioRef.current = new Audio(url);
@@ -157,6 +176,7 @@ export const AudioRecorder = () => {
       audioRef.current.pause();
       setIsPlaying(false);
     } else {
+      audioRef.current.currentTime = currentTime || 0;
       audioRef.current.play();
       setIsPlaying(true);
     }
@@ -391,7 +411,7 @@ export const AudioRecorder = () => {
                   Download Audio
                 </Button>
                 <Button
-                  onClick={handleSendToAI}
+                  onClick={ () => onSendToAI(recordedBlob)}
                   variant="contained"
                   startIcon={<Send />}
                   fullWidth

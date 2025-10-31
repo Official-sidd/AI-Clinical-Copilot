@@ -22,19 +22,24 @@ import {
 } from "@mui/icons-material";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ReactMarkdown from "react-markdown";
 
-export const AISummary = ({ onApproveChange }) => {
+interface MedicalCodes {
+  [code: string]: string;
+}
+
+export const AISummary = ({ onApproveChange, summary, medical_codes }) => {
   const [showCodes, setShowCodes] = useState(false);
   const [isApproved, setIsApproved] = useState(false);
   const [openConfirm, setOpenConfirm] = useState(false);
-  const [summary] =
-    useState(`Chief Complaint: Patient presents with persistent cough and mild fever for 3 days.
+  //   const [summary] =
+  //     useState(`Chief Complaint: Patient presents with persistent cough and mild fever for 3 days.
 
-History of Present Illness: 45-year-old male reports dry cough that began 3 days ago, accompanied by low-grade fever (99.8°F). No shortness of breath or chest pain. Patient denies recent travel or known sick contacts.
+  // History of Present Illness: 45-year-old male reports dry cough that began 3 days ago, accompanied by low-grade fever (99.8°F). No shortness of breath or chest pain. Patient denies recent travel or known sick contacts.
 
-Assessment: Likely viral upper respiratory infection. Vitals stable. No signs of pneumonia on examination.
+  // Assessment: Likely viral upper respiratory infection. Vitals stable. No signs of pneumonia on examination.
 
-Plan: Recommend rest, hydration, and OTC symptom management. Follow up if symptoms worsen or persist beyond 7 days.`);
+  // Plan: Recommend rest, hydration, and OTC symptom management. Follow up if symptoms worsen or persist beyond 7 days.`);
 
   const handleCopy = async () => {
     try {
@@ -106,21 +111,22 @@ Plan: Recommend rest, hydration, and OTC symptom management. Follow up if sympto
         title={
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <Psychology color="primary" />
-            <span>AI-Generated Visit Summary</span>
+            <span>Visit Summary</span>
           </Box>
         }
       />
       <CardContent>
-        <TextField
+        <ReactMarkdown>{summary}</ReactMarkdown>
+        {/* <TextField
           fullWidth
           multiline
           rows={8}
           value={summary}
           InputProps={{ readOnly: true }}
           sx={{ mb: 2, fontFamily: "monospace", fontSize: 13 }}
-        />
+        /> */}
 
-        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mb: 2 }}>
+        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mb: 2, mt: 2 }}>
           <Button
             variant="outlined"
             size="small"
@@ -166,50 +172,37 @@ Plan: Recommend rest, hydration, and OTC symptom management. Follow up if sympto
               Suggested Medical Codes
             </Typography>
             <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  fontSize: 14,
-                }}
-              >
-                <span>ICD-10: R05 (Cough)</span>
-                <Typography
-                  variant="caption"
-                  color="primary"
-                  sx={{ fontWeight: 600 }}
-                >
-                  Primary
-                </Typography>
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  fontSize: 14,
-                }}
-              >
-                <span>ICD-10: R50.9 (Fever, unspecified)</span>
-                <Typography variant="caption" color="text.secondary">
-                  Secondary
-                </Typography>
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  fontSize: 14,
-                }}
-              >
-                <span>CPT: 99213 (Office visit, moderate complexity)</span>
-                <Typography
-                  variant="caption"
-                  color="primary"
-                  sx={{ fontWeight: 600 }}
-                >
-                  Billing
-                </Typography>
-              </Box>
+              {Object.entries(medical_codes || {}).map(
+                ([code, description]) => (
+                  <Box
+                    key={code}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      fontSize: 14,
+                      bgcolor: "background.default",
+                      px: 1.5,
+                      py: 0.5,
+                      borderRadius: 1,
+                      border: "1px solid",
+                      borderColor: "divider",
+                    }}
+                  >
+                    <span>
+                      {code.startsWith("R") ||
+                      code.startsWith("A") ||
+                      code.startsWith("B")
+                        ? `ICD-10: ${code}`
+                        : code.startsWith("9")
+                        ? `CPT: ${code}`
+                        : code}
+                    </span>
+                    <span style={{ textAlign: "right", color: "#555" }}>
+                      {String(description)}
+                    </span>
+                  </Box>
+                )
+              )}
             </Box>
           </Box>
         </Collapse>
@@ -217,3 +210,10 @@ Plan: Recommend rest, hydration, and OTC symptom management. Follow up if sympto
     </Card>
   );
 };
+
+// const isICD10 = /^[A-Z]/.test(code); // starts with a letter
+// const isCPT = /^[0-9]/.test(code);   // starts with a number
+
+// <span>
+//   {isICD10 ? `ICD-10: ${code}` : isCPT ? `CPT: ${code}` : code}
+// </span>
