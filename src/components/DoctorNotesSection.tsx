@@ -54,6 +54,21 @@ async function updateDoctorNotes(
   }
 }
 
+const labels = {
+  B: 'Behavior',
+  I: 'Intervention',
+  R: 'Response',
+  P: 'Plan',
+  D: 'Data',
+  A: 'Assessment',
+  S: 'Subjective',
+  O: 'Objective',
+
+  // BIRP: "Behavior, Intervention, Response, Plan",
+  // DAP: "Data, Assessment, Plan",
+  // SOAP: "Subjective, Objective, Assessment, Plan",
+};
+ 
 export const DoctorNotesSection: React.FC<DoctorNotesSectionProps> = ({
   notes,
   onSave,
@@ -158,7 +173,7 @@ export const DoctorNotesSection: React.FC<DoctorNotesSectionProps> = ({
                 variant="subtitle2"
                 sx={{ mb: 1, color: "text.secondary", fontWeight: 600 }}
               >
-                {key}:
+                {labels[key]}:
               </Typography>
               <TextField
                 fullWidth
