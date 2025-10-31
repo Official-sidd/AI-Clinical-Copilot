@@ -127,14 +127,14 @@ export const AISummary = ({ onApproveChange, summary, medical_codes }) => {
         /> */}
 
         <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mb: 2, mt: 2 }}>
-          <Button
+          {/* <Button
             variant="outlined"
             size="small"
             startIcon={<Refresh />}
             onClick={handleRegenerate}
           >
             Regenerate
-          </Button>
+          </Button> */}
           <Button
             variant="outlined"
             size="small"

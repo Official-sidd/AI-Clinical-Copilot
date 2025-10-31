@@ -15,7 +15,7 @@ export const Navigation = ({ darkMode, onToggleTheme, themeLocked }) => {
       <Toolbar>
         <Typography
           onClick={() => {
-            // toast.error("Yaha kuch nahi hoga, chala ja bsdk!");
+            // toast.error("Yaha kuch nahi hoga, chala ja ghar!");
             window.location.href = "/";
           }}
           variant="h6"
