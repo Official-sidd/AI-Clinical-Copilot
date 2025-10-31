@@ -1,3 +1,4 @@
+ const BASE_URL = import.meta.env.VITE_BASE_URL;
 // src/api/fetchTranscript.js
 // export const fetchTranscript = async () => {
 //   try {
@@ -18,7 +19,7 @@ export const fetchTranscript = async (audioFile) => {
     formData.append("audio", audioFile, "recording.mp3");
 
     // const response = await fetch(`${BASE_URL}/transcribe_with_notes`, {
-    const response = await fetch("https://bk6xbdf1-5000.inc1.devtunnels.ms/transcribe_with_notes", {
+    const response = await fetch(`${BASE_URL}/transcribe_with_notes`, {
       method: "POST",
       body: formData,
     });
